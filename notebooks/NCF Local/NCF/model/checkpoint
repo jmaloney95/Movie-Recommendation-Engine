@@ -1,0 +1,2 @@
+model_checkpoint_path: "/content/drive/MyDrive/NCF/model/model.ckpt"
+all_model_checkpoint_paths: "/content/drive/MyDrive/NCF/model/model.ckpt"
