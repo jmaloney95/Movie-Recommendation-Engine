@@ -9,24 +9,22 @@ import tensorflow as tf
 import sys
 import pickle
 from tensorflow.keras.models import load_model
-
 import import_ipynb
 
-# user_mapping = NCF_fixed_model.user_mapping
-# item_mapping = NCF_fixed_model.item_mapping
-# from tensorflow.keras.models import load_model
-from NCF_fixed_model import NeuralCollaborativeFiltering
+from NCF.ipynb import NeuralCollaborativeFiltering
 
-with open('user_mapping.pkl', 'rb') as f:
+with open('notebooks/NCF Local/user_mapping.pkl', 'rb') as f:
     user_mapping = pickle.load(f)
 
-with open('item_mapping.pkl', 'rb') as f:
+with open('notebooks/NCF Local/item_mapping.pkl', 'rb') as f:
     item_mapping = pickle.load(f)
 
-model = load_model('M:/Movie-Recommendation-Engine/models/ncf_model.keras', custom_objects={"NeuralCollaborativeFiltering": NeuralCollaborativeFiltering})
+model = NeuralCollaborativeFiltering(n_users=n_users, n_items=n_items)
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+model.load_weights('notebooks/model.weights.h5')
 
 def get_user_input():
-    print("Enter the IDs of three movies you have watched and their ratings (e.g., 1 4.5):")
+    print("Enter the IDs of three movies you have watched and their ratings:")
     user_ratings = []
     for i in range(3):
         movie_id = int(input(f"Movie {i+1} ID: "))
@@ -54,8 +52,12 @@ def recommend_movies(user_ratings, model, movies_df, top_n=10):
     return recommendations
 
 if __name__ == "__main__":
-    movies_df = pd.read_csv('movies.csv')
+    movies_df = pd.read_csv('M:/Movie-Recommendation-Engine/data/raw/ml-1m/movies.dat')
     user_ratings = get_user_input()
     recommendations = recommend_movies(user_ratings, model, movies_df)
     print("Top Recommendations:")
     print(recommendations)
+    recommendations.plot(kind='bar', x='title', y='prediction', legend=False)
+    plt.title("Top Movie Recommendations")
+    plt.ylabel("Predicted Rating")
+    plt.show()
