@@ -10,17 +10,17 @@ This project is a neural collaborative filtering-based movie recommendation syst
 ## Installation
 1. Clone the repo
 
-git clone https://github.com/your-repo/movie-recommendation-engine.git
-cd movie-recommendation-engine
+    `git clone https://github.com/your-repo/movie-recommendation-engine.git
+    cd movie-recommendation-engine`
 
 2. Set Up a Python Environment
 
-python -m venv env
-source env/bin/activate   # On Windows: env\Scripts\activate
+    `python -m venv env
+    source env/bin/activate   # On Windows: env\Scripts\activate`
 
 3. Install Dependencies
 
-pip install -r requirements.txt
+    `pip install -r requirements.txt`
 
 ## File Structure
 ```
@@ -45,18 +45,19 @@ Movie-Recommendation-Engine/
 1. Prepare the Data
 Ensure that the following files are in place:
 
-notebooks/user_mapping.pkl
-notebooks/item_mapping.pkl
-data/raw/ml-1m/movies.dat
+    - notebooks/user_mapping.pkl
+    - notebooks/item_mapping.pkl
+    - data/raw/ml-1m/movies.dat
 
 2. Execute the Application
 Run the main script:
-python main.py
+
+    `python main.py`
 
 3. Follow the On-Screen Instructions
 The application will:
 
-Prompt you to input IDs and ratings for three movies.
+    Prompt you to input IDs and ratings for three movies.
 Display a list of recommended movies.
 
 ## Dependencies
@@ -69,7 +70,7 @@ Matplotlib
 Scipy
 Install all dependencies using the requirements.txt file:
 
-pip install -r requirements.txt
+`pip install -r requirements.txt`
 
 ## Overview
 Model: Neural Collaborative Filtering (NCF) for recommendations.
