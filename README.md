@@ -1,61 +1,80 @@
-# Movie Recommendation System Using MovieLens 20M Dataset
+# Movie Recommendation System
+This project is a neural collaborative filtering-based movie recommendation system. It allows users to input their movie ratings and get personalized movie recommendations.
+## Table of Contents
+1. Installation
+2. File Structure
+3. How to Run
+4. Dependencies
+5. Overview
 
-<a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
-    <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
-</a>
+## Installation
+1. Clone the repo
 
-Movie recommendation engine using collaborative filtering and SVD techniques on the MovieLens 20M dataset.
+git clone https://github.com/your-repo/movie-recommendation-engine.git
+cd movie-recommendation-engine
 
-## Project Organization
+2. Set Up a Python Environment
+
+python -m venv env
+source env/bin/activate   # On Windows: env\Scripts\activate
+
+3. Install Dependencies
+
+pip install -r requirements.txt
+
+## File Structure
+```
+
+Movie-Recommendation-Engine/
+│
+├── model.py                     # Contains model definition and loading
+├── data_processing.py           # Handles data preprocessing and mappings
+├── main.py                      # Main application logic
+├── model.weights.h5             # Trained model weights
+├── notebooks/
+│   ├── user_mapping.pkl         # Serialized user mapping
+│   ├── item_mapping.pkl         # Serialized item mapping
+│
+└── data/
+    └── raw/
+        └── ml-1m/
+            └── movies.dat       # Movie data
 
 ```
-├── LICENSE            <- Open-source license if one is chosen
-├── Makefile           <- Makefile with convenience commands like `make data` or `make train`
-├── README.md          <- The top-level README for developers using this project.
-├── data
-│   ├── external       <- Data from third party sources.
-│   ├── interim        <- Intermediate data that has been transformed.
-│   ├── processed      <- The final, canonical data sets for modeling.
-│   └── raw            <- The original, immutable data dump.
-│
-├── docs               <- A default mkdocs project; see www.mkdocs.org for details
-│
-├── models             <- Trained and serialized models, model predictions, or model summaries
-│
-├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-│                         the creator's initials, and a short `-` delimited description, e.g.
-│                         `1.0-jqp-initial-data-exploration`.
-│
-├── pyproject.toml     <- Project configuration file with package metadata for 
-│                         movie_recommender and configuration for tools like black
-│
-├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-│
-├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-│   └── figures        <- Generated graphics and figures to be used in reporting
-│
-├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-│                         generated with `pip freeze > requirements.txt`
-│
-├── setup.cfg          <- Configuration file for flake8
-│
-└── movie_recommender   <- Source code for use in this project.
-    │
-    ├── __init__.py             <- Makes movie_recommender a Python module
-    │
-    ├── config.py               <- Store useful variables and configuration
-    │
-    ├── dataset.py              <- Scripts to download or generate data
-    │
-    ├── features.py             <- Code to create features for modeling
-    │
-    ├── modeling                
-    │   ├── __init__.py 
-    │   ├── predict.py          <- Code to run model inference with trained models          
-    │   └── train.py            <- Code to train models
-    │
-    └── plots.py                <- Code to create visualizations
-```
+## How to Run
+1. Prepare the Data
+Ensure that the following files are in place:
+
+notebooks/user_mapping.pkl
+notebooks/item_mapping.pkl
+data/raw/ml-1m/movies.dat
+
+2. Execute the Application
+Run the main script:
+python main.py
+
+3. Follow the On-Screen Instructions
+The application will:
+
+Prompt you to input IDs and ratings for three movies.
+Display a list of recommended movies.
+
+## Dependencies
+The project uses the following Python libraries:
+
+TensorFlow
+NumPy
+Pandas
+Matplotlib
+Scipy
+Install all dependencies using the requirements.txt file:
+
+pip install -r requirements.txt
+
+## Overview
+Model: Neural Collaborative Filtering (NCF) for recommendations.
+Input: User-provided ratings for three movies.
+Output: Top-N recommended movies with predicted scores.
 
 --------
 
