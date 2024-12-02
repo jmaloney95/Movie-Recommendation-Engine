@@ -1,11 +1,11 @@
 # Movie Recommendation System
 This project is a neural collaborative filtering-based movie recommendation system. It allows users to input their movie ratings and get personalized movie recommendations.
 ## Table of Contents
-1. Installation
-2. File Structure
-3. How to Run
-4. Dependencies
-5. Overview
+1. [Installation](#installation)
+2. [File Structure](#file-structure)
+3. [How to Run](#how-to-run)
+4. [Dependencies](#dependencies)
+5. [Overview](#overview)
 
 ## Installation
 1. Clone the repo
