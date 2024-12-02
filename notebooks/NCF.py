@@ -18,6 +18,7 @@ from recommenders.evaluation.python_evaluation import (
 )
 from keras.saving import register_keras_serializable
 from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.optimizers import Adam, SGD
 
 print("TensorFlow version:", tf.__version__)
 
@@ -33,26 +34,26 @@ CHECKPOINT_FILEPATH = './model.weights.h5'
 
 # In[24]:
 
-
 ratings = pd.read_csv('M:/Movie-Recommendation-Engine/notebooks/NCF Local/NCF/ml-1m_dataset.csv')
+
 train_data, test_data = train_test_split(ratings, test_size=0.2, random_state=42)
 
-user_mapping = {user_id: idx for idx, user_id in enumerate(train_data['userID'].unique())}
-item_mapping = {item_id: idx for idx, item_id in enumerate(train_data['itemID'].unique())}
+user_mapping = {user_id: idx for idx, user_id in enumerate(train_data['userId'].unique())}
+item_mapping = {item_id: idx for idx, item_id in enumerate(train_data['movieId'].unique())}
 
-train_data['userID'] = train_data['userID'].map(user_mapping)
-train_data['itemID'] = train_data['itemID'].map(item_mapping)
+train_data['userId'] = train_data['userId'].map(user_mapping)
+train_data['movieId'] = train_data['movieId'].map(item_mapping)
 
-test_data['userID'] = test_data['userID'].map(user_mapping)
-test_data['itemID'] = test_data['itemID'].map(item_mapping)
+test_data['userId'] = test_data['userId'].map(user_mapping)
+test_data['movieId'] = test_data['movieId'].map(item_mapping)
 
 test_data = test_data.copy()
-test_data['userID'] = test_data['userID'].fillna(0)
-test_data['itemID'] = test_data['itemID'].fillna(0)
+test_data['userId'] = test_data['userId'].fillna(0)
+test_data['movieId'] = test_data['movieId'].fillna(0)
 
 
-test_data['userID'] = test_data['userID'].astype(int)
-test_data['itemID'] = test_data['itemID'].astype(int)
+test_data['userId'] = test_data['userId'].astype(int)
+test_data['movieId'] = test_data['movieId'].astype(int)
 
 n_users = len(user_mapping)
 n_items = len(item_mapping)
@@ -62,7 +63,7 @@ print(f"Users: {n_users}, Items: {n_items}")
 
 # In[25]:
 
-
+# Create custom NCF architecture
 @register_keras_serializable(package="Custom", name="NeuralCollaborativeFiltering")
 class NeuralCollaborativeFiltering(Model):
     def __init__(self, n_users, n_items, embedding_dim=8):
@@ -98,78 +99,93 @@ if __name__ == "__main__":
 
     RESUME_TRAINING = False
 
-    model = build_model(n_users, n_items)
+    optimizers = {
+            'Adam': Adam(learning_rate=0.001),
+            'SGD with Momentum': SGD(learning_rate=0.01, momentum=0.9)
+    }
+    results = {}
+    
+    for opt_name, optimizer in optimizers.items():
+        print(f"\nTraining with {opt_name} optimizer...\n")
 
-    if RESUME_TRAINING and os.path.exists(CHECKPOINT_FILEPATH):
-        print("Checkpoint found. Resuming training...")
-        model.load_weights(CHECKPOINT_FILEPATH)
-    else:
-        print("No checkpoint found. Training from scratch.")
+        model = build_model(n_users, n_items)
 
-    checkpoint_callback = ModelCheckpoint(
-        filepath=CHECKPOINT_FILEPATH,
-        save_weights_only=True,
-        save_best_only=False,
-        verbose=1
-    )
+        if RESUME_TRAINING and os.path.exists(CHECKPOINT_FILEPATH):
+            print("Checkpoint found. Resuming training...")
+            model.load_weights(CHECKPOINT_FILEPATH)
+        else:
+            print("No checkpoint found. Training from scratch.")
 
-    user_input = train_data['userID'].values
-    item_input = train_data['itemID'].values
-    labels = train_data['rating'].values > 3.5
+        checkpoint_callback = ModelCheckpoint(
+            filepath=CHECKPOINT_FILEPATH,
+            save_weights_only=True,
+            save_best_only=False,
+            verbose=1
+        )
 
-    start_time = time.time()
+        user_input = train_data['userId'].values
+        item_input = train_data['movieId'].values
+        labels = train_data['rating'].values > 3.5
 
-    history = model.fit(
-        [user_input, item_input],
-        labels,
-        epochs=EPOCHS,
-        batch_size=BATCH_SIZE,
-        validation_split=0.2,
-        callbacks=[checkpoint_callback]
-    )
+        start_time = time.time()
 
-    end_time = time.time()
-    elapsed_time = end_time - start_time
-    print(f"Total training time: {elapsed_time:.2f} seconds")
+        history = model.fit(
+            [user_input, item_input],
+            labels,
+            epochs=EPOCHS,
+            batch_size=BATCH_SIZE,
+            validation_split=0.2,
+            callbacks=[checkpoint_callback]
+        )
 
-    train_acc = history.history['accuracy']
-    val_acc = history.history['val_accuracy']
-    epochs = range(1, len(train_acc) + 1)
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        print(f"Total training time: {elapsed_time:.2f} seconds")
 
-    plt.figure(figsize=(10, 6))
-    plt.plot(epochs, train_acc, label='Training Accuracy')
-    plt.plot(epochs, val_acc, label='Validation Accuracy', linestyle='--')
-    plt.xlabel('Epochs')
-    plt.ylabel('Accuracy')
-    plt.title('Training and Validation Accuracy')
-    plt.legend()
-    plt.grid(True)
-    plt.show()
+        train_acc = history.history['accuracy']
+        val_acc = history.history['val_accuracy']
+        epochs = range(1, len(train_acc) + 1)
 
-    with open('user_mapping.pkl', 'wb') as f:
-        pickle.dump(user_mapping, f)
+        # Plot training and validation accuracy
+        plt.figure(figsize=(10, 6))
+        plt.plot(epochs, train_acc, label='Training Accuracy')
+        plt.plot(epochs, val_acc, label='Validation Accuracy', linestyle='--')
+        plt.xlabel('Epochs')
+        plt.ylabel('Accuracy')
+        plt.title('Training and Validation Accuracy')
+        plt.legend()
+        plt.grid(True)
 
-    with open('item_mapping.pkl', 'wb') as f:
-        pickle.dump(item_mapping, f)
+        plot_path = 'training_validation_accuracy.png'
+        plt.savefig(plot_path, dpi=300, bbox_inches='tight')
+        print(f"Training graph saved: {plot_path}")
 
-    user_input_test = test_data['userID'].values
-    item_input_test = test_data['itemID'].values
-    predictions = model.predict([user_input_test, item_input_test])
+        plt.show()
 
-    test_data['prediction'] = predictions
+        with open('user_mapping.pkl', 'wb') as f:
+            pickle.dump(user_mapping, f)
 
-    eval_map = map(test_data, test_data, col_prediction='prediction', k=TOP_K)
-    eval_ndcg = ndcg_at_k(test_data, test_data, col_prediction='prediction', k=TOP_K)
-    eval_precision = precision_at_k(test_data, test_data, col_prediction='prediction', k=TOP_K)
-    eval_recall = recall_at_k(test_data, test_data, col_prediction='prediction', k=TOP_K)
+        with open('item_mapping.pkl', 'wb') as f:
+            pickle.dump(item_mapping, f)
 
-    print(
-        f"MAP: {eval_map:.6f}\n"
-        f"NDCG: {eval_ndcg:.6f}\n"
-        f"Precision@K: {eval_precision:.6f}\n"
-        f"Recall@K: {eval_recall:.6f}"
-    )
+        user_input_test = test_data['userId'].values
+        item_input_test = test_data['movieId'].values
+        predictions = model.predict([user_input_test, item_input_test])
 
-    model.save('M:/Movie-Recommendation-Engine/models/ncf_model.keras')
-    print("Model saved as 'ncf_model.keras'")
+        test_data['prediction'] = predictions
+
+        eval_map = map(test_data, test_data, col_prediction='prediction', k=TOP_K)
+        eval_ndcg = ndcg_at_k(test_data, test_data, col_prediction='prediction', k=TOP_K)
+        eval_precision = precision_at_k(test_data, test_data, col_prediction='prediction', k=TOP_K)
+        eval_recall = recall_at_k(test_data, test_data, col_prediction='prediction', k=TOP_K)
+
+        print(
+            f"MAP: {eval_map:.6f}\n"
+            f"NDCG: {eval_ndcg:.6f}\n"
+            f"Precision@K: {eval_precision:.6f}\n"
+            f"Recall@K: {eval_recall:.6f}"
+        )
+
+        model.save('M:/Movie-Recommendation-Engine/models/ncf_model.keras')
+        print("Model saved as 'ncf_model.keras'")
 
