@@ -11,10 +11,10 @@ from tensorflow.keras.models import load_model
 
 from NCF import NeuralCollaborativeFiltering
 
-with open('./user_mapping.pkl', 'rb') as f:
+with open('M:/Movie-Recommendation-Engine/notebooks/user_mapping.pkl', 'rb') as f:
     user_mapping = pickle.load(f)
 
-with open('./item_mapping.pkl', 'rb') as f:
+with open('M:/Movie-Recommendation-Engine/notebooks/item_mapping.pkl', 'rb') as f:
     item_mapping = pickle.load(f)
 
 n_users = len(user_mapping)
