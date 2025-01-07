@@ -88,6 +88,8 @@ The model was trained using TensorFlow and evaluated using common metrics for re
    - NDCG (Normalized Discounted Cumulative Gain)
    - MAP (Mean Average Precision)
 
+I implemented a feature that gives users the flexibility to start training either from scratch or from a previously saved checkpoint. This enhancement allowed me to resume paused training sessions, enabling further training for more epochs and identifying the point at which the model begins to overfit. Additionally, I automated the generation of a training graph at the end of each session, providing a clear visual representation of overfitting trends and aiding in hyperparameter optimization to minimize loss.
+
 ![screenshot](/images/initiate_training.png)
 
 ## 6. Challenges and Solutions
@@ -114,8 +116,9 @@ The model's initial training time was long, especially when running on Google Co
 
 The NCF model demonstrated strong performance on the test set, with the following evaluation metrics:
 
-   - Precision@10: 0.84
-   - Recall@10: 0.76
+   - MAP: 0.57
+   - Precision@10: 0.89
+   - Recall@10: 0.57
    - NDCG@10: 0.78
 
 ![screenshot](/images/training_results.png)
