@@ -1,3 +1,4 @@
+![screenshot](/images/coverimage.jpg)
 # Movie Recommendation System
 This project is a neural collaborative filtering-based movie recommendation system. It allows users to input their movie ratings and get personalized movie recommendations.
 
@@ -16,7 +17,7 @@ This project is a neural collaborative filtering-based movie recommendation syst
 12. [Dependencies](#dependencies)
 13. [Overview](#overview)
 
-## Introduction
+## 1. Introduction
 
 *In the modern digital entertainment world, users have access to vast catalogs of movies on
 streaming platforms. However, discovering new content can be overwhelming. A
@@ -25,7 +26,7 @@ on user preferences. By analyzing user interactions (e.g., ratings) and demograp
 the system can recommend movies that users are likely to enjoy, increasing user engagement
 and satisfaction.*
 
-## Data Preparation
+## 2. Data Preparation
 
 The MovieLens dataset is a widely used benchmark in recommendation systems research. For this project, I utilized the 1M version of the dataset, which contains 1 million ratings from 6,000 users on 4,000 movies. The dataset includes three main files:
 
@@ -35,7 +36,7 @@ The MovieLens dataset is a widely used benchmark in recommendation systems resea
 
 The first step was to load the datasets and ensure consistency across all files. The timestamps were converted from Unix format to human-readable dates to better understand user behavior patterns. Additionally, I focused on the three critical columns for collaborative filtering: userId, movieId, and rating. This normalization step ensured that the data was ready for modeling. One of the primary challenges in preparing the data was handling missing or incorrect values. I implemented a cleaning process that involved identifying outliers and ensuring the integrity of the user-item interactions. For instance, I removed duplicate entries and handled users who had provided inconsistent ratings across the dataset.
 
-## Files Used in the Project
+## 3. Files Used in the Project
 
 The movie recommendation system is built using the following core files:
 
@@ -44,7 +45,7 @@ The movie recommendation system is built using the following core files:
    - `model.py`: Defines the function for loading the Neural Collaborative Filtering (NCF) model architecture. The model is compiled with an optimizer and loss function and then loads the pre-trained weights.
    - `train.py`: Manages the training process of the recommendation model. It splits the data into training and testing sets, builds and trains the model using user-item interactions, and saves the trained model's weights. The script also generates accuracy graphs to visualize the model's performance during training.
 
-## Exploratory Data Analysis (EDA)
+## 4. Exploratory Data Analysis (EDA)
 
 Exploratory Data Analysis (EDA) was conducted to gain a better understanding of the dataset and to identify patterns that could inform model development. Key insights included:
 
@@ -54,7 +55,9 @@ Exploratory Data Analysis (EDA) was conducted to gain a better understanding of 
 
 Using visualization tools like Matplotlib and Seaborn, I created charts to visualize the distribution of ratings and the frequency of ratings per user. These insights helped shape my data preparation and modeling strategies.
 
-## Model Development
+![screenshot](/images/rating_distribution.png)
+
+## 5. Model Development
 
 The core of this project is the Neural Collaborative Filtering (NCF) model. Unlike traditional matrix factorization methods, NCF leverages deep learning to learn user-item interactions.
 
@@ -85,7 +88,9 @@ The model was trained using TensorFlow and evaluated using common metrics for re
    - NDCG (Normalized Discounted Cumulative Gain)
    - MAP (Mean Average Precision)
 
-## Challenges and Solutions
+![screenshot](/images/initiate_training.png)
+
+## 6. Challenges and Solutions
 
 ### Problem 1: Inconsistent User Behavior
 
@@ -105,7 +110,7 @@ The model's initial training time was long, especially when running on Google Co
 
    - Solution: I optimized the data loading and preprocessing steps by saving intermediate results. This approach reduced the need to repeatedly process the same data, cutting down the training time significantly.
 
-## Results & Insights
+## 7. Results & Insights
 
 The NCF model demonstrated strong performance on the test set, with the following evaluation metrics:
 
@@ -113,11 +118,13 @@ The NCF model demonstrated strong performance on the test set, with the followin
    - Recall@10: 0.76
    - NDCG@10: 0.78
 
+![screenshot](/images/training_results.png)
+
 These results indicate that the model is capable of providing personalized movie recommendations with a high degree of accuracy.
 
 Additionally, the model showed improvements over traditional collaborative filtering methods by capturing more complex user-item interactions through deep learning.
 
-## Conclusion
+## 8. Conclusion
 
 This project showcased the development of a movie recommendation system using Neural Collaborative Filtering. By leveraging deep learning techniques, I was able to build a model that goes beyond traditional matrix factorization methods, offering more personalized and accurate recommendations.
 
@@ -129,7 +136,7 @@ Future improvements could include:
 
 Overall, this project provided valuable insights into the challenges and solutions involved in building a recommendation system using machine learning.
 
-## Installation
+## 9. Installation
 1. Clone the repo
 
     `git clone https://github.com/your-repo/movie-recommendation-engine.git
@@ -144,7 +151,7 @@ Overall, this project provided valuable insights into the challenges and solutio
 
     `pip install -r requirements.txt`
 
-## File Structure
+## 10. File Structure
 ```
 
 Movie-Recommendation-Engine/
@@ -163,7 +170,7 @@ Movie-Recommendation-Engine/
             └── movies.dat       # Movie data
 
 ```
-## How to Run
+## 11. How to Run
 1. Prepare the Data
 Ensure that the following files are in place:
 
@@ -182,7 +189,7 @@ The application will:
     Prompt you to input IDs and ratings for three movies.
 Display a list of recommended movies.
 
-## Dependencies
+## 12. Dependencies
 The project uses the following Python libraries:
 
 TensorFlow
@@ -194,7 +201,7 @@ Install all dependencies using the requirements.txt file:
 
 `pip install -r requirements.txt`
 
-## Overview
+## 13. Overview
 Model: Neural Collaborative Filtering (NCF) for recommendations.
 Input: User-provided ratings for three movies.
 Output: Top-N recommended movies with predicted scores.
