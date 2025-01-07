@@ -28,7 +28,7 @@ and satisfaction.*
 
 ## 2. Data Preparation
 
-The MovieLens dataset is a widely used benchmark in recommendation systems research. For this project, I utilized the 1M version of the dataset, which contains 1 million ratings from 6,000 users on 4,000 movies. The dataset includes three main files:
+The [MovieLens dataset](https://grouplens.org/datasets/movielens/1m/) is a widely used benchmark in recommendation systems research. For this project, I utilized the 1M version of the dataset, which contains 1 million ratings from 6,000 users on 4,000 movies. The dataset includes three main files:
 
    - `ratings.dat`: Contains user IDs, movie IDs, ratings (on a scale from 1 to 5), and timestamps.
    - `movies.dat`: Contains movie IDs, titles, and genres.
